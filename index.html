@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">   
 
-  <title>Scoresheet</title>
+  <title>UGAMA</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -97,8 +97,8 @@
    </style>  
 </head>  
 <body>  
-   <h1>Scoresheet for Event</h1>  
-   <div><strong>Dr. B.B Hegde First Grade College</strong></div>  
+   <h1>TABLE GENERATOR</h1>  
+   <!-- <div><strong></strong></div>   -->
    <div class="form-container">  
       <div class="input-group">  
         <label for="columns">Number of Columns:</label>  
@@ -118,7 +118,8 @@
       <option value="Courier New">Courier New</option>  
       <option value="Georgia">Georgia</option>  
       <option value="Times New Roman">Times New Roman</option>  
-      <option value="Verdana">Verdana</option>  
+      <option value="Verdana">Verdana</option>
+       
    </select>  
    <button id="changeFontButton" onclick="showFontDropdown()">Change Font</button>  
    <button id="downloadButton" onclick="downloadPDF()">Download as PDF</button>  
@@ -184,7 +185,7 @@
   
       function downloadPDF() {  
         const table = document.getElementById('scoresheet');  
-        const collegeName = "Dr. B.B Hegde First Grade College";  
+        const collegeName = "";  
         html2canvas(table).then(canvas => {  
            const imgData = canvas.toDataURL('image/png');  
            const { jsPDF } = window.jspdf;  
