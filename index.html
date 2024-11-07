@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+
+  <title>Scoresheet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+      background: linear-gradient(to right, #87cefa, #007bff);
+    }
+    table {
+      margin: 30px auto;
+      border-collapse: collapse;
+      width: 100%; /* Use 100% width for better responsiveness */
+      table-layout: fixed; /* Ensure columns are equally sized */
+      background-color: #ffffff; /* Table background color */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add some shadow for depth */
+    }
+      table, th, td {  
+        border: 2px solid #000000; /* Border color */  
+      }  
+      th, td {  
+        padding: 20px;  
+        text-align: center;  
+        word-wrap: break-word; /* Ensure text wraps within cells */  
+      }  
+      th {  
+        background-color: #ffffff; /* Header background color */  
+        color: rgb(0, 0, 0); /* Header text color */  
+      }  
+      td {  
+        background-color: #f9f9f9; /* Alternate cell background color */  
+      }  
+      #changeFontButton, #downloadButton, #generateButton {  
+        margin-top: 20px;  
+        background-color: #4CAF50; /* Button background color */  
+        color: white; /* Button text color */  
+        border: none;  
+        padding: 10px 20px;  
+        cursor: pointer;  
+        border-radius: 5px;  
+      }  
+      #changeFontButton:hover, #downloadButton:hover, #generateButton:hover {  
+        background-color: #45a049; /* Button hover color */  
+      }  
+      input[type="text"] {  
+        width: 100%;  
+        box-sizing: border-box;  
+        text-align: center;  
+        padding: 5px;  
+        border: 1px solid #000000;  
+        border-radius: 5px;  
+      }  
+      .form-container {  
+        display: flex;  
+        flex-direction: column;  
+        align-items: center;  
+        margin-bottom: 20px;  
+      }  
+      .form-container label, .form-container input, .form-container button {  
+        margin: 5px;  
+      }  
+      .input-group {  
+        display: flex;  
+        justify-content: center;  
+        align-items: center;  
+        margin-bottom: 20px;  
+      }  
+      .input-group input {  
+        margin: 5px;  
+      }  
+      .input-group label {  
+        margin-right: 10px;  
+      }  
+      #fontDropdown {  
+        margin-top: 20px;  
+        padding: 10px;  
+        border: none;  
+        border-radius: 5px;  
+        background-color: #4CAF50; /* Dropdown background color */  
+        color: white; /* Dropdown text color */  
+      }  
+      footer {  
+        color: silver;  
+        position: fixed;  
+        bottom: 0;  
+        left: 50%;  
+        transform: translateX(-50%);  
+      }  
+      footer:hover {  
+        color: #f1e3e3; /* Change the color to a darker gray on hover */  
+      }  
+   </style>  
+</head>  
+<body>  
+   <h1>Scoresheet for Event</h1>  
+   <div><strong>Dr. B.B Hegde First Grade College</strong></div>  
+   <div class="form-container">  
+      <div class="input-group">  
+        <label for="columns">Number of Columns:</label>  
+        <input type="number" id="columns" min="1" value="3">  
+      </div>  
+      <div class="input-group">  
+        <label for="rows">Number of Rows:</label>  
+        <input type="number" id="rows" min="1" value="3">  
+      </div>  
+      <button onclick="prepareInputs()">Prepare Inputs</button>  
+   </div>  
+   <div id="firstRowInputs"></div>  
+   <button id="generateButton" onclick="generateTable()" style="display:none;">Create Table</button>  
+   <table id="scoresheet"></table>  
+   <select id="fontDropdown" style="display:none;" onchange="changeFont()">  
+      <option value="Arial">Arial</option>  
+      <option value="Courier New">Courier New</option>  
+      <option value="Georgia">Georgia</option>  
+      <option value="Times New Roman">Times New Roman</option>  
+      <option value="Verdana">Verdana</option>  
+   </select>  
+   <button id="changeFontButton" onclick="showFontDropdown()">Change Font</button>  
+   <button id="downloadButton" onclick="downloadPDF()">Download as PDF</button>  
+  
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>  
+   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>  
+   <script>  
+      function prepareInputs() {  
+        const columns = document.getElementById('columns').value;  
+        const inputDiv = document.getElementById('firstRowInputs');  
+        inputDiv.innerHTML = '';  
+        for (let i = 0; i < columns; i++) {  
+           const input = document.createElement('input');  
+           input.type = 'text';  
+           input.id = `firstRowInput${i}`;  
+           input.placeholder = `Column ${i + 1}`;  
+           inputDiv.appendChild(input);  
+           inputDiv.appendChild(document.createElement('br'));  
+        }  
+        document.getElementById('generateButton').style.display = 'inline';  
+      }  
+  
+      function generateTable() {  
+        const columns = document.getElementById('columns').value;  
+        const rows = document.getElementById('rows').value;  
+        const table = document.getElementById('scoresheet');  
+        table.innerHTML = '';  
+  
+        // Create table headers  
+        const headerRow = table.insertRow();  
+        for (let i = 0; i < columns; i++) {  
+           const headerCell = document.createElement('th');  
+           const firstRowInput = document.getElementById(`firstRowInput${i}`).value;  
+           headerCell.innerText = firstRowInput;  
+           headerRow.appendChild(headerCell);  
+        }  
+  
+        // Create table rows and cells  
+        for (let i = 0; i < rows; i++) {  
+           const row = table.insertRow();  
+           for (let j = 0; j < columns; j++) {  
+              const cell = row.insertCell();  
+              cell.innerHTML = '&nbsp;'; // Empty cells  
+           }  
+        }  
+  
+        // Change background color every 2 seconds  
+        setInterval(() => {  
+           const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);  
+           table.style.backgroundColor = randomColor;  
+        }, 2000);  
+      }  
+  
+      function showFontDropdown() {  
+        document.getElementById('fontDropdown').style.display = 'inline';  
+      }  
+  
+      function changeFont() {  
+        const selectedFont = document.getElementById('fontDropdown').value;  
+        const table = document.getElementById('scoresheet');  
+        table.style.fontFamily = selectedFont;  
+      }  
+  
+      function downloadPDF() {  
+        const table = document.getElementById('scoresheet');  
+        const collegeName = "Dr. B.B Hegde First Grade College";  
+        html2canvas(table).then(canvas => {  
+           const imgData = canvas.toDataURL('image/png');  
+           const { jsPDF } = window.jspdf;  
+           const pdf = new jsPDF('p', 'mm', 'a4');  
+           const pageWidth = pdf.internal.pageSize.getWidth();  
+           const pageHeight = pdf.internal.pageSize.getHeight();  
+           const imgWidth = canvas.width;  
+           const imgHeight = canvas.height;  
+           const ratio = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);  
+           // Add College Name at the top  
+           pdf.text(collegeName, pageWidth / 2, 10, { align: 'center' });  
+           // Add table image below the college name  
+           pdf.addImage(imgData, 'PNG', 10, 20, imgWidth * ratio - 20, imgHeight * ratio - 20);  
+           pdf.save('scoresheet.pdf');  
+        });  
+      }  
+   </script>  
+   <footer>Developed by Venkey</footer>  
+</body>  
+</html>
